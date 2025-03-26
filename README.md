@@ -1,51 +1,81 @@
 <!---
 {
-  "depends_on": [],
+  "depends_on": ["ed", "apt"],
   "author": "Stephan Bökelmann",
-  "first_used": "2025-03-17",
-  "keywords": ["learning", "exercises", "education", "practice"]
+  "first_used": "2025-03-26",
+  "keywords": ["vim", "exercise", "texteditor"]
 }
 --->
 
-# Learning Through Exercises
+# Editing Files from your Terminal with VIM
 
 ## 1) Introduction
-Learning by doing is one of the most effective methods to acquire new knowledge and skills. Rather than passively consuming information, actively engaging in problem-solving fosters deeper understanding and long-term retention. By working through structured exercises, students can grasp complex concepts in a more intuitive and applicable way. This approach is particularly beneficial in technical fields like programming, mathematics, and engineering.
+`vim` is a powerful and versatile text editor that is widely used for software development, system administration, and other technical tasks. Mastering `vim` can significantly enhance productivity, as it allows for rapid text editing and navigation with minimal to non reliance on the mouse.
+
+In this challenge, you will practice some fundamental commands. The goal is to help you gain confidence in opening, editing, and saving files within Vim. Learning Vim is a foundational skill for anyone working in the command-line environment and provides a stepping stone for mastering more advanced text-editing techniques.
+
+When working with `vim`, its important to recall how Linux works with files in general:
+The user-space program requests the content of a file through [system calls](www.github.com/STEMgraph/missing), like `open()`, `read()` or `mmap()`. 
+The kernel then interacts with the file system to locate the requested file and transfer a copy of it into the RAM, which is associated with the new process.
+What this means for the user is, that they are not actually working with the file, but with a copy. 
+If the copy is manipulated, this manipulation needs to be written back to the original location in storage, this way the manipulated file can be found using the same path later on.
+
+In order to not be fully confused with `vim` - or any other interactive commandline texteditor - you have to accept that the mouse is not an option. 
+An understanding of the three basic states in which `vim` can be is essential for working with it. 
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    state "Normal Mode" as Normal
+    state "Insert Mode" as Insert
+    state "Command-Line Mode" as CommandLine
+
+    [*] --> Normal
+
+    Normal --> Insert : " i, ... "
+    Normal --> CommandLine : " #colon; "
+
+    Insert --> Normal : " Esc, ... "
+
+    CommandLine --> Normal : " Esc, ... "
+```
+Consider the diagram above. When `vim` has just been opened, it is in the `normal`-mode. This means, that you can navigate to other modes from here or can use some very specific hot-keys, that we don't want to go into here. 
+
+If you ever get stuck in `vim` your first goal is to get the program back to `normal`-mode this usually works by pressing the `Esc`-Key.
+From there we will explore two of `vim`s multiple modes: `insert`-mode and `terminal`-mode. 
+While the `insert`-mode is used to write your text, the `terminal`-mode can be considered as a substitution of all the things you might want to do with a mouse in Word, such as opening and saving a file. 
+
+This exercise will teach you how to open a file, manipulate it, write it back to storage and close the application. 
 
 ### 1.1) Further Readings and Other Sources
-- [The Importance of Practice in Learning](https://www.sciencedirect.com/science/article/pii/S036013151300062X)
-- "The Art of Learning" by Josh Waitzkin
-- [How to Learn Effectively: 5 Key Strategies](https://www.edutopia.org/article/5-research-backed-learning-strategies)
+- [Learn-Vim - An extensive guide to vim](https://github.com/iggredible/Learn-Vim)
+- `vimtutor` - An interactive learning-experience if you have `vim` already installed: just type `vimtutor` into your commandline and press `Return`
 
 ## 2) Tasks
-1. **Write a Summary**: Summarize the concept of "learning by doing" in 3-5 sentences.
-2. **Example Identification**: List three examples from your own experience where learning through exercises helped you understand a topic better.
-3. **Create an Exercise**: Design a simple exercise for a topic of your choice that someone else could use to practice.
-4. **Follow an Exercise**: Find an online tutorial that includes exercises and complete at least two of them.
-5. **Modify an Existing Exercise**: Take a basic problem from a textbook or online course and modify it to make it slightly more challenging.
-6. **Pair Learning**: Explain a concept to a partner and guide them through an exercise without giving direct answers.
-7. **Review Mistakes**: Look at an exercise you've previously completed incorrectly. Identify why the mistake happened and how to prevent it in the future.
-8. **Time Challenge**: Set a timer for 10 minutes and try to solve as many simple exercises as possible on a given topic.
-9. **Self-Assessment**: Create a checklist to evaluate your own performance in completing exercises effectively.
-10. **Reflect on Progress**: Write a short paragraph on how this structured approach to exercises has influenced your learning.
+1. **Installing vim**: Install `vim`. Either by using your packagemanager or by downloading the installer from the `vim` website.
+2. **Opening vim**: Navigate to your home-directory. When you arrive, type `vim` and press `Return`. The screen that you now see is an empty home-screen. No file is opened yet.
+![VIMs homescreen](assets/homescreen.png)
+3. **Open an empty Buffer**: If you haven't pressed any button yet, you are in `normal`-mode. If you pressed anythin, just press the `Esc` to get to `normal`-mode. In order to write something, you'll need a block of memory in the RAM, where your text can be stored until you write it to your storage - this is called _a buffer_. Type `:enew`. You should see your written command on the bottom of the screen and press `Return`. `enew` stands for _edit new_. The prepended `:` indicates the `terminal`-mode. 
+4. **Add something to your Buffer**: After opening the buffer, press the `i`-key. This brings the application into `insert`-mode. This is also indicated on the bottom of your screen. Type some words and press `Esc` to go back to `normal`-mode.
 
 <details>
-  <summary>Tip for Task 5</summary>
-  Try making small adjustments first, such as increasing the difficulty slightly or adding an extra constraint.
+  <summary>The new Buffer</summary>
+
+  You can also press `i` directly from the home screen. `:enew` was just used here to present the concept of a buffer more clearly.
+
 </details>
 
+5. **Discard your Buffer**: Back in `normal`-mode, type `:q!` for _quit_. This forces `vim` to close the buffer without writing it to the storage.
+6. **Store your Buffer**: Make sure you are in your home-directory or any other directory you can savely add a file to. Repeat steps 2, 3 and 4. Instead of discarding your buffer, type `:w new.txt`. This will _write_ to a new file calles `new.txt`. Close the application with `:q`. 
+7. **Open your existing File**: Use `ls` to locate your new file in your home-directory. You can now open it with `vim new.txt`. Go into `insert`-mode and change something within that file. Don't type `:w`, but try to run `:q`. You should now see a message, telling you, that `vim` does not want to end your session, since you buffer has not been stored. Decide for yourself, whether you want to run `:q!` and force quitting without saving or you can combine _write_ and _quit_ to `:wq`. 
+8. **Learn more**: In order to get more professional with `vim`, just type `vimtutor` into your terminal and run it. Doing the tutorial takes roughly 30 minutes. 
+
 ## 3) Questions
-1. What are the main benefits of learning through exercises compared to passive learning?
-2. How do exercises improve long-term retention?
-3. Can you think of a subject where learning through exercises might be less effective? Why?
-4. What role does feedback play in learning through exercises?
-5. How can self-designed exercises improve understanding?
-6. Why is it beneficial to review past mistakes in exercises?
-7. How does explaining a concept to someone else reinforce your own understanding?
-8. What strategies can you use to stay motivated when practicing with exercises?
-9. How can timed challenges contribute to learning efficiency?
-10. How do exercises help bridge the gap between theory and practical application?
+1. What are the three primary modes of `vim`, and how do you switch between them?
+2. How do you create and save a new file in `vim`?
+3. What is the purpose of the `:enew` command in `vim`?
+4. How can you exit `vim` without saving changes?
+5. What steps should you follow to open an existing file, make edits, and save the changes in `vim`?
 
 ## 4) Advice
-Practice consistently and seek out diverse exercises that challenge different aspects of a topic. Combine exercises with reflection and feedback to maximize your learning efficiency. Don't hesitate to adapt exercises to fit your own needs and ensure that you're actively engaging with the material, rather than just going through the motions.
-
+Try different other editors in your command-line, to get more familiar with the concept of terminal editing. Other common editors are `nano`, `emacs` or `helix`.
