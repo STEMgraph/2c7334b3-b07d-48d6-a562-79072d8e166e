@@ -1,5 +1,6 @@
 <!---
 {
+  "id": "2c7334b3-b07d-48d6-a562-79072d8e166e",
   "depends_on": ["ed", "apt"],
   "author": "Stephan Bökelmann",
   "first_used": "2025-03-26",
