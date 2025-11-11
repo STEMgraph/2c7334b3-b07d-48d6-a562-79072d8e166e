@@ -1,6 +1,7 @@
 <!---
 {
   "id": "2c7334b3-b07d-48d6-a562-79072d8e166e",
+  "teaches": "Editing Files from your Terminal with VIM",
   "depends_on": [
     "3193c311-8662-4aed-a77a-d595bbf1c1e4",
     "fcef696e-079c-4d83-b611-7b378bb8ac07"
